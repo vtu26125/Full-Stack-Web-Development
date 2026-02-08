@@ -1,0 +1,45 @@
+CREATE DATABASE college_db;
+USE college_db;
+
+CREATE TABLE Student (
+    vtu_number VARCHAR(20) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(15),
+    department VARCHAR(50)
+);
+
+CREATE TABLE Course (
+    course_code VARCHAR(20) PRIMARY KEY,
+    course_name VARCHAR(100) NOT NULL,
+    faculty_id VARCHAR(20),
+    student_vtu_number VARCHAR(20),
+    faculty_email VARCHAR(100),
+    FOREIGN KEY (student_vtu_number)
+        REFERENCES Student(vtu_number)
+        ON DELETE CASCADE
+);
+
+INSERT INTO Student (vtu_number, name, email, phone, department) VALUES
+('1VTU21CS001', 'Rahul Sharma', 'rahul.cs@college.edu', '9876543210', 'Computer Science'),
+('1VTU21CS002', 'Ananya Gupta', 'ananya.cs@college.edu', '9876543211', 'Computer Science'),
+('1VTU21EC003', 'Rohit Verma', 'rohit.ec@college.edu', '9876543212', 'Electronics');
+
+INSERT INTO Course (course_code, course_name, faculty_id, student_vtu_number, faculty_email) VALUES
+('CS101', 'Data Structures', 'FAC001', '1VTU21CS001', 'ds.faculty@college.edu'),
+('CS102', 'Database Management Systems', 'FAC002', '1VTU21CS002', 'dbms.faculty@college.edu'),
+('EC101', 'Digital Electronics', 'FAC003', '1VTU21EC003', 'de.faculty@college.edu');
+
+SELECT * FROM Student;
+SELECT * FROM Course;
+
+SELECT 
+    s.vtu_number,
+    s.name,
+    s.department,
+    c.course_code,
+    c.course_name,
+    c.faculty_email
+FROM Student s
+JOIN Course c
+ON s.vtu_number = c.student_vtu_number;
