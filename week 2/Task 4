@@ -1,0 +1,19 @@
+SELECT CONCAT(SUBSTRING_INDEX(username, '@', 1), '123') AS default_password
+FROM Users;
+
+SELECT REGEXP_REPLACE(contact_number, '[^0-9]', '') AS valid_contact
+FROM Users;
+
+SELECT CONCAT(
+    UPPER(SUBSTRING(name, 1, 1)),
+    LOWER(SUBSTRING(name, 2))
+) AS normalized_name
+FROM Employee;
+
+SELECT COALESCE(mobile, phone, email) AS preferred_contact
+FROM Users;
+
+SELECT department,
+       AVG(TIMESTAMPDIFF(YEAR, joining_date, CURDATE())) AS avg_experience
+FROM Employee
+GROUP BY department;
