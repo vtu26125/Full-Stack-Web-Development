@@ -1,0 +1,79 @@
+DELIMITER $$
+
+CREATE TRIGGER before_driver_insert
+BEFORE INSERT ON Driver
+FOR EACH ROW
+BEGIN
+    IF NEW.otp IS NULL OR NEW.otp = '' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'OTP required for entry';
+    END IF;
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER after_order_item_insert
+AFTER INSERT ON Order_Items
+FOR EACH ROW
+BEGIN
+    UPDATE Orders
+    SET total_price = total_price + (NEW.quantity * NEW.price)
+    WHERE order_id = NEW.order_id;
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER before_insert_created_at
+BEFORE INSERT ON Customer
+FOR EACH ROW
+BEGIN
+    SET NEW.created_at = NOW();
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER prevent_negative_salary
+BEFORE INSERT ON Employee
+FOR EACH ROW
+BEGIN
+    IF NEW.salary < 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Salary cannot be negative';
+    END IF;
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER prevent_negative_salary_update
+BEFORE UPDATE ON Employee
+FOR EACH ROW
+BEGIN
+    IF NEW.salary < 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Salary cannot be negative';
+    END IF;
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER employee_audit_trigger
+AFTER UPDATE ON Employee
+FOR EACH ROW
+BEGIN
+    INSERT INTO Employee_Audit
+    (emp_id, old_name, old_salary, old_department, updated_at)
+    VALUES
+    (OLD.emp_id, OLD.name, OLD.salary, OLD.department, NOW());
+END$$
+
+DELIMITER ;
