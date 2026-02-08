@@ -1,0 +1,15 @@
+SELECT DATEDIFF(end_date, start_date) AS days_between
+FROM records;
+
+SELECT DATE_ADD(start_date, INTERVAL 30 DAY) AS expiry_date
+FROM records;
+
+SELECT DATE_SUB(CURDATE(), INTERVAL 7 DAY) AS date_before_7_days;
+
+SELECT *
+FROM records
+WHERE DAYOFWEEK(created_at) IN (1, 7);
+
+SELECT MONTHNAME(
+    STR_TO_DATE('15-02-2025', '%d-%m-%Y')
+) AS month_name;
