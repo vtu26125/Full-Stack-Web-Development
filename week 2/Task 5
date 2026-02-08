@@ -1,0 +1,88 @@
+DELIMITER $$
+
+CREATE FUNCTION net_salary_after_tax(gross_salary DECIMAL(10,2))
+RETURNS DECIMAL(10,2)
+DETERMINISTIC
+BEGIN
+    RETURN gross_salary - (gross_salary * 0.10);
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE FUNCTION user_activity_status(last_login DATE)
+RETURNS VARCHAR(10)
+DETERMINISTIC
+BEGIN
+    IF DATEDIFF(CURDATE(), last_login) <= 30 THEN
+        RETURN 'Active';
+    ELSE
+        RETURN 'Inactive';
+    END IF;
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE FUNCTION calculate_tax(salary DECIMAL(10,2))
+RETURNS DECIMAL(10,2)
+DETERMINISTIC
+BEGIN
+    IF salary <= 300000 THEN
+        RETURN 0;
+    ELSEIF salary <= 600000 THEN
+        RETURN salary * 0.10;
+    ELSEIF salary <= 1000000 THEN
+        RETURN salary * 0.20;
+    ELSE
+        RETURN salary * 0.30;
+    END IF;
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE FUNCTION experience_category(years INT)
+RETURNS VARCHAR(10)
+DETERMINISTIC
+BEGIN
+    IF years < 2 THEN
+        RETURN 'Fresher';
+    ELSEIF years BETWEEN 2 AND 5 THEN
+        RETURN 'Junior';
+    ELSEIF years BETWEEN 6 AND 10 THEN
+        RETURN 'Mid';
+    ELSE
+        RETURN 'Senior';
+    END IF;
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE FUNCTION late_fee_calculator(due_date DATE, payment_date DATE)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE days_late INT;
+    DECLARE fee INT;
+
+    IF payment_date <= due_date THEN
+        RETURN 0;
+    END IF;
+
+    SET days_late = DATEDIFF(payment_date, due_date);
+    SET fee = days_late * 50;
+
+    IF fee > 1000 THEN
+        SET fee = 1000;
+    END IF;
+
+    RETURN fee;
+END$$
+
+DELIMITER ;
