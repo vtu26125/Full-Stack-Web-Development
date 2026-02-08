@@ -1,0 +1,49 @@
+START TRANSACTION;
+
+UPDATE Student
+SET phone = '9999999999'
+WHERE vtu_number = '1VTU21CS001';
+
+COMMIT;
+
+START TRANSACTION;
+
+SAVEPOINT sp1;
+
+UPDATE Student
+SET department = 'Information Science'
+WHERE vtu_number = '1VTU21CS002';
+
+UPDATE Student
+SET department = 'Electrical'
+WHERE vtu_number = '1VTU21EC003';
+
+ROLLBACK TO sp1;
+
+COMMIT;
+
+DELIMITER $$
+
+CREATE FUNCTION add_numbers(a INT, b INT)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    RETURN a + b;
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE FUNCTION get_student_count(dept_name VARCHAR(50))
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE total INT;
+    SELECT COUNT(*) INTO total
+    FROM Student
+    WHERE department = dept_name;
+    RETURN total;
+END$$
+
+DELIMITER ;
