@@ -1,0 +1,10 @@
+CREATE INDEX idx_email ON Users(email);
+
+CREATE UNIQUE INDEX idx_unique_username ON Users(username);
+
+DROP INDEX idx_email ON Users;
+
+CREATE INDEX idx_aadhar ON Users(aadhar);
+
+CREATE INDEX idx_status_created_at ON Orders(status, created_at);
+
