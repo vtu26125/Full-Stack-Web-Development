@@ -1,0 +1,27 @@
+SELECT * FROM Student;
+SELECT * FROM Course;
+
+SELECT COUNT(*) FROM Student;
+SELECT COUNT(*) FROM Course;
+
+SELECT department, COUNT(*)
+FROM Student
+GROUP BY department;
+
+SELECT * FROM Student
+ORDER BY vtu_number ASC;
+
+SELECT * FROM Student
+ORDER BY vtu_number DESC;
+
+SELECT * FROM Student
+WHERE department = 'Computer Science';
+
+SELECT 
+    s.vtu_number,
+    c.course_name,
+    c.faculty_id,
+    c.faculty_email
+FROM Student s
+JOIN Course c
+ON s.vtu_number = c.student_vtu_number;
