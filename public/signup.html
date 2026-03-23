@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - Electronics Inventory</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="auth-body">
+  <div class="auth-card">
+    <h1>Create account</h1>
+    <p class="auth-subtitle">Start tracking your electronics inventory</p>
+    <form id="signup-form" class="auth-form">
+      <label>
+        Full name
+        <input type="text" name="full_name" required placeholder="Your name">
+      </label>
+      <label>
+        Email
+        <input type="email" name="email" required placeholder="you@email.com">
+      </label>
+      <label>
+        Password
+        <input type="password" name="password" required placeholder="Create a password">
+      </label>
+      <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
+    <p class="auth-footer">Already have an account? <a href="/login.html">Login</a></p>
+    <p class="auth-footer"><a href="/app">Back to dashboard</a></p>
+  </div>
+
+  <script>
+    const form = document.getElementById('signup-form');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        full_name: form.full_name.value.trim(),
+        email: form.email.value.trim(),
+        password: form.password.value,
+      };
+      try {
+        const res = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Signup failed');
+        localStorage.setItem('user', JSON.stringify(data.user));
+        window.location.href = '/app';
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+  </script>
+</body>
+</html>

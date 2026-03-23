@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Electronics Inventory</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="auth-body">
+  <div class="auth-card">
+    <h1>Welcome back</h1>
+    <p class="auth-subtitle">Sign in to manage your inventory</p>
+    <form id="login-form" class="auth-form">
+      <label>
+        Email
+        <input type="email" name="email" required placeholder="you@email.com">
+      </label>
+      <label>
+        Password
+        <input type="password" name="password" required placeholder="••••••••">
+      </label>
+      <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+    <p class="auth-footer">Don't have an account? <a href="/signup.html">Sign up</a></p>
+    <p class="auth-footer"><a href="/app">Back to dashboard</a></p>
+  </div>
+
+  <script>
+    const form = document.getElementById('login-form');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        email: form.email.value.trim(),
+        password: form.password.value,
+      };
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Login failed');
+        localStorage.setItem('user', JSON.stringify(data.user));
+        window.location.href = '/app';
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+  </script>
+</body>
+</html>
